@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment 
+metadata: 
+  name: trendappdeployment
+  labels:
+    app: trendapp 
+spec: 
+  replicas: 2 
+  selector:
+    matchLabels:
+      app: trendapp 
+  template: 
+    metadata: 
+      labels: 
+        app: trendapp 
+    spec: 
+     containers: 
+       - image: srisatyap/dev:latest 
+         name: trendapp
+         ports: 
+           - containerPort: 3000 
+      
