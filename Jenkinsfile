@@ -48,7 +48,7 @@ pipeline{
         //}
         stage('Update Image tag in Remote repository'){
             steps{
-                withCredentials([usernamePassword(credentialsId: 'github-token', usernameVariable:'GIT_USER', passwordVariable: 'GIT_TOKEN')]){
+                withCredentials([usernamePassword(credentialsId: 'github-cred', usernameVariable:'GIT_USER', passwordVariable: 'GIT_TOKEN')]){
                     sh """
                      pwd
                      echo "configuring git user details for commit history...."
