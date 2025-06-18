@@ -11,7 +11,7 @@ pipeline{
                 script {
                     def commitMessage = sh(script: "git log -1 --pretty=%B", returnStdout: true).trim()
                     if (commitMessage.contains('[skip ci]')){
-                        echo 'Detected [skip ci] in commitMessage. skipping Build'
+                        echo 'Detected [skip ci] in commitMessage. so skipping Build'
                         currentBuild.result = 'SUCCESS'
                         error('Exiting due to [skip ci]')
                     }
