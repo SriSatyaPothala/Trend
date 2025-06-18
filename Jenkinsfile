@@ -58,6 +58,7 @@ pipeline{
                      git config user.name "SriSatyaPothala"
                      BUILD_NUMBER=${BUILD_NUMBER}
                      echo "updating manifest with latest image tag..."
+                     cat manifests/deployment.yml | grep image
                      sed -i "s|image: srisatyap/dev:.*|image: srisatyap/dev:${BUILD_NUMBER}|g" manifests/deployment.yml
                      echo "commiting the changes to the remote repo..."
                      git add manifests/deployment.yml
