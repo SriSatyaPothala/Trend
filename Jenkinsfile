@@ -13,7 +13,7 @@ pipeline{
                     if (commitMessage.contains('[skip ci]')){
                         echo 'Detected [skip ci] in commitMessage. skipping Build'
                         currentBuild.result = 'SUCCESS'
-                        return
+                        error('Exiting due to [skip ci]')
                     }
                 }
             }
