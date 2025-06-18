@@ -2,7 +2,7 @@ pipeline{
     agent any
     environment{
         // Docker Hub repository 
-        DOCKER_HUB_REPO = "srisatya/dev"
+        DOCKER_HUB_REPO = "srisatyap/dev"
         GIT_REPO_NAME = "Trend"
         GIT_USER_NAME = "SriSatyaPothala"
     }
