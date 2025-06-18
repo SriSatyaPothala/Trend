@@ -53,6 +53,7 @@ pipeline{
                      pwd
                      echo "configuring git user details for commit history...."
                      git checkout main
+                     git pull --rebase origin main
                      git config user.email "srisatyapothala11@gmail.com"
                      git config user.name "SriSatyaPothala"
                      BUILD_NUMBER=${BUILD_NUMBER}
