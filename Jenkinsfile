@@ -7,6 +7,18 @@ pipeline{
         GIT_USER_NAME = "SriSatyaPothala"
     }
     stages{
+        stage('Check for [skip ci]'){
+            steps{
+                script {
+                    def commitMessage = sh(script: "git log -1 --pretty=%B", returnStdout: true).trim()
+                    if (commitMessage.contains('[skip ci]')){
+                        echo 'Detected [skip ci] in commitMessage. skipping Build'
+                        currentBuild.result = 'SUCCESS'
+                        return
+                    }
+                }
+            }
+        }
         stage('Build Docker Image and push to docker hub'){
             steps{
                 script {
@@ -38,16 +50,20 @@ pipeline{
         stage('Update Image tag in Remote repository'){
             steps{
                 withCredentials([usernamePassword(credentialsId: 'github-cred', passwordVariable: 'GIT_TOKEN')]){
-                    sh ''' 
+                    sh """
                      pwd
+                     echo "configuring git user details for commit history...."
                      git config user.email "srisatyapothala11@gmail.com"
                      git config user.name "SriSatyaPothala"
                      BUILD_NUMBER=${BUILD_NUMBER}
+                     echo "updating manifest with latest image tag..."
                      sed -i "s/latest/${BUILD_NUMBER}/g" manifests/deployment.yml
+                     echo "commiting the changes to the remote repo..."
                      git add manifests/deployment.yml
-                     git commit -m "Modified deployment manifest with the latest build number [skip ci]"
+                     git commit -m "Modified deployment manifest with the latest build number [skip ci]" || echo "No changes to commit"
+                     echo "Pushing the changes to the repo..."
                      git push https://${GIT_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main   
-                    '''
+                    """
                 }
 
             }
