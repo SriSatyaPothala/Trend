@@ -63,3 +63,15 @@ Given a set of build files for a react application with vite build.The goal of t
   - Prepare the manifest files
     - `deployment.yml`: define the deployment specifications, along with number of replicas needed and this file image name is modified with the latest build number from jenkins , which helps in deploying the latest image always.
     - `service.yml`: for enabling external access to the application, service manifest is necessary. Note: expose the service on port: 80 (since loadbalancer http by default works with port 80), but keep the targetPort: 3000 as per the requirement.
+## Jenkins
+- Login to Jenkins and create a user 
+- Go to manage Jenkins -> plugins -> available plugins and install the following
+  - Github Plugin
+  - Docker Pipeline
+  - Docker plugin
+  - Kubernetes plugin
+  - AWS Steps plugin
+  - Github Integration plugin 
+  - Generic webhook trigger
+  - Blue Ocean 
+- C
