@@ -4,7 +4,6 @@ pipeline{
         // Docker Hub repository 
         DOCKER_HUB_REPO = "srisatyap/dev"
         GIT_REPO_NAME = "Trend"
-        GIT_USER_NAME = "SriSatyaPothala"
     }
     stages{
         stage('Check for [skip ci]'){
@@ -49,7 +48,7 @@ pipeline{
         //}
         stage('Update Image tag in Remote repository'){
             steps{
-                withCredentials([usernamePassword(credentialsId: 'github-cred', passwordVariable: 'GIT_TOKEN')]){
+                withCredentials([usernamePassword(credentialsId: 'github-token', usernameVariable:'GIT_USER' passwordVariable: 'GIT_TOKEN')]){
                     sh """
                      pwd
                      echo "configuring git user details for commit history...."
@@ -62,7 +61,7 @@ pipeline{
                      git add manifests/deployment.yml
                      git commit -m "Modified deployment manifest with the latest build number [skip ci]" || echo "No changes to commit"
                      echo "Pushing the changes to the repo..."
-                     git push https://${GIT_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main   
+                     git push https://${GIT_TOKEN}@github.com/${GIT_USER}/${env.GIT_REPO_NAME} HEAD:main   
                     """
                 }
 
