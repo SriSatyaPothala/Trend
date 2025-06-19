@@ -39,17 +39,6 @@ pipeline{
                 }
             }
         }
-        // git version > 2.35.2 allows modifications from the same user as the git repo owner.
-        //stage('Fix git ownership'){
-            //steps{
-                //sh '''
-                //git config --global --add safe.directory /var/lib/jenkins/workspace/springbootapp-pipeline
-                //if [-d ".git"]; then
-                 // chown -R root:root .git
-                //fi
-                //'''
-            //}
-        //}
         stage('Update Image tag in Remote repository'){
             steps{
                 withCredentials([usernamePassword(credentialsId: 'github-cred', usernameVariable:'GIT_USER', passwordVariable: 'GIT_TOKEN')]){
@@ -81,9 +70,9 @@ pipeline{
                         echo 'configuring kubectl for EKS...'
                         aws eks update-kubeconfig --region ap-south-1 --name miniproject2
                         echo 'deploying application in EKS....'
-                        kubectl apply -f deployment.yml 
+                        kubectl apply -f manifests/deployment.yml 
                         echo 'deploying service in EKS....'
-                        kubectl apply -f service.yml 
+                        kubectl apply -f manifests/service.yml 
                         '''
                 } catch (Exception e) {
                     error("Deployment failed : ${e.getMessage()}")
