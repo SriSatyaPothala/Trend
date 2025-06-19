@@ -80,5 +80,5 @@ Given a set of build files for a react application with vite build.The goal of t
 - Specify the script path , click on save and apply.
 - Add the webhook trigger in github by going to settings and giving the payload url as
   `http://<jenkins_server-ip>:8080/github-webhook/` and add push event , click on save 
-
+- Whenever there is a push event to github repository, a jenkins build is immediately started.
 
