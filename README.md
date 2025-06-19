@@ -93,7 +93,18 @@ Given a set of build files for a react application with vite build.The goal of t
             `username: jenkins`
             `groups:`
             `- system:masters `
+  - application LOADBALANCER arn: `ae0d24de94d9c4396940aec589fa7bd7-2077290764.ap-south-1.elb.amazonaws.com`
 ## Monitoring
-
-
+- To monitor either the cluster health or the application health, prometheus is needed to collect metrics from kubernetes cluster. Grafana used for visualization of the metrics. Install both of them inside the cluster using helm charts(package manager for Kubernetes).
+- Install helm on ubuntu using `curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash`
+- Install Prometheus and grafana into EKS using 'kube-prometheus-stack' chart.
+- Add the helm repo `helm repo add prometheus-community https://prometheus-community.github.io/helm-charts`
+- `helm repo update`
+- Create a seperate namespace for monitoring : `kubectl create namespace monitoring`
+- Install Prometheus+Grafana+Exporters using : `helm install prometheus-stack prometheus-community/kube-prometheus-stack   --namespace monitoring`. This installs the prometheus, grafana and exporters like kube-state-metrics for pod, deployment metrics and node exporter for cpu, memory metrics of the nodes.
+- Expose grafana and prometheus services using load balancer and access the prometheus UI using
+  - load balancer arn `http://aca194962bd344be68d62bd0bba29d35-1269514334.ap-south-1.elb.amazonaws.com:9090/`
+  - load balancer arn of the grafana UI : `http://a78ae569229084dcdbc905ecbde6d1a0-1882530586.ap-south-1.elb.amazonaws.com`
+  - kube-prometheus-stack automatically scrapes and adds the prometheus datasource to grafana and default dashboards are available in dashboards. Access the dashboard with ID 315(for cluster CPU, Memory usage), 1860(Cluster health with node cpu, memory usage)
+ 
 
