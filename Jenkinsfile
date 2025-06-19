@@ -1,5 +1,9 @@
 pipeline{
     agent any
+     options {
+        timeout(time: 20, unit: 'MINUTES')    //  Auto-fail stuck builds
+        disableConcurrentBuilds()             //  Prevent overlapping builds
+    }
     environment{
         // Docker Hub repository 
         DOCKER_HUB_REPO = "srisatyap/dev"
@@ -56,7 +60,6 @@ pipeline{
                      git pull https://${GIT_TOKEN}@github.com/${GIT_USER}/${env.GIT_REPO_NAME} main --rebase
                      git config user.email "srisatyapothala11@gmail.com"
                      git config user.name "SriSatyaPothala"
-                     BUILD_NUMBER=${BUILD_NUMBER}
                      echo "updating manifest with latest image tag..."
                      cat manifests/deployment.yml | grep image
                      sed -i "s|image: srisatyap/dev:.*|image: srisatyap/dev:${BUILD_NUMBER}|g" manifests/deployment.yml
@@ -72,13 +75,20 @@ pipeline{
         }
         stage('Deploy the application using AWS EKS'){
             steps{
-                sh ''' 
-                echo 'configuring kubectl for EKS...'
-                aws eks update-kubeconfig --region ap-south-1 --name miniproject2
-                echo 'deploying application in EKS....'
-                kubectl apply -f deployment.yml 
-                kubectl apply -f service.yml 
-                '''
+                script{
+                    try {
+                      sh '''
+                        echo 'configuring kubectl for EKS...'
+                        aws eks update-kubeconfig --region ap-south-1 --name miniproject2
+                        echo 'deploying application in EKS....'
+                        kubectl apply -f deployment.yml 
+                        echo 'deploying service in EKS....'
+                        kubectl apply -f service.yml 
+                        '''
+                } catch (Exception e) {
+                    error("Deployment failed : ${e.getMessage()}")
+                }
+                }
             }
         }
     }

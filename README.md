@@ -74,4 +74,11 @@ Given a set of build files for a react application with vite build.The goal of t
   - Github Integration plugin 
   - Generic webhook trigger
   - Blue Ocean 
-- C
+- Create a pipeline job and give it a name . For instance Trend
+- Select pipeline build trigger as Github hook trigger for GITScm Polling
+- Choose the pipeline script from SCM, give the repository URL and branch
+- Specify the script path , click on save and apply.
+- Add the webhook trigger in github by going to settings and giving the payload url as
+  `http://<jenkins_server-ip>:8080/github-webhook/` and add push event , click on save 
+
+

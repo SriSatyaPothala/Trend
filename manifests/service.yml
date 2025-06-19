@@ -6,7 +6,7 @@ metadata:
     name: trend-svc
 spec: 
   selector:
-    name: trend-svc 
+    app: trendapp 
   type: LoadBalancer 
   ports: 
     - port: 80 
