@@ -81,4 +81,19 @@ Given a set of build files for a react application with vite build.The goal of t
 - Add the webhook trigger in github by going to settings and giving the payload url as
   `http://<jenkins_server-ip>:8080/github-webhook/` and add push event , click on save 
 - Whenever there is a push event to github repository, a jenkins build is immediately started.
+- Implementation: Jenkinsfile has 4 stages
+  - stage('Check for [skip ci]'): skips the build if the last commit to the remote repo is made by CI
+  - stage('Build Docker Image and push to docker hub'): builds the docker image and pushes to dockerhub using credentials
+  -  stage('Update Image tag in Remote repository'): updates the remote repository manifests/deployment.yml with the latest image tag in the dockerhub
+  - stage('Deploy the application using AWS EKS'): rolls out the deployment using kubectl commands
+    note: eks has 2 layers of permissions, one with the role(on what it can access) and one from eks side (what iam roles are actually allowed to run kubectl with the cluster). so 
+    - `kubectl edit configmap aws-auth -n kube-system` run this command and add your jenkins-role to 
+    - `  mapRoles: | `
+          `- rolearn: arn:aws:iam::<your-account-id>:role/jenkins-role`
+            `username: jenkins`
+            `groups:`
+            `- system:masters `
+## Monitoring
+
+
 
