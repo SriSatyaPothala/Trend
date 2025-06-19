@@ -57,9 +57,9 @@ Given a set of build files for a react application with vite build.The goal of t
     - `curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)   _amd64.tar.gz" | tar xz -C /tmp`
     - `sudo mv /tmp/eksctl /usr/local/bin`
   - Create EKS Cluster
-    - `eksctl create cluster --name miniproject2 --region ap-south-1 --node-type t3.micro` (This command provisions the EKS control plane and worker nodes in the specified region with the default node group)
+    - `eksctl create cluster --name miniproject2 --region ap-south-1 --node-type t3.medium` (This command provisions the EKS control plane and worker nodes in the specified region with the default node group)
     - Use kubectl get nodes to check the cluster creation status successful or not.
-    - NOTE: select t3.micro as t2.micro allows 4 pods per node which is sufficient for cluster pods itself ,so to avoid pods going to pending state, choose an instancetype with min t3.micro.
+    - NOTE: select t3.medium as t2.micro allows 4 pods per node which is sufficient for cluster pods itself ,so to avoid pods going to pending state, choose an instancetype with min t3.micro.
   - Prepare the manifest files
     - `deployment.yml`: define the deployment specifications, along with number of replicas needed and this file image name is modified with the latest build number from jenkins , which helps in deploying the latest image always.
     - `service.yml`: for enabling external access to the application, service manifest is necessary. Note: expose the service on port: 80 (since loadbalancer http by default works with port 80), but keep the targetPort: 3000 as per the requirement.
