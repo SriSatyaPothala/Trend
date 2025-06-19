@@ -15,7 +15,7 @@ spec:
         app: trendapp 
     spec: 
      containers: 
-       - image: srisatyap/dev:26
+       - image: srisatyap/dev:28
          name: trendapp
          ports: 
            - containerPort: 3000 
